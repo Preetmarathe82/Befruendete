@@ -1,8 +1,11 @@
 import ollama
 import json
 from mistake import analyze_mistake
+from database import create_tables, save_mistake
 
 mistakes = []
+
+create_tables()
 
 messages=[
         {
@@ -69,6 +72,8 @@ while True:
     print("DEBUG:", analysis)
 
     if analysis["has_mistake"]:
-        analysis["count"] = 1
-        analysis["reviewed"] = False
-        mistakes.append(analysis)
+        save_mistake(
+            analysis["mistake"],
+            analysis["correction"],
+            analysis["topic"]
+        )
